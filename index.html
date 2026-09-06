@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>INFOSES</title>
+<meta name="description" content="Les outils SES et orientation d'Infoses, sur votre téléphone.">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#8b0000">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="INFOSES">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rouge:#c0392b;
+    --rouge-profond:#8b0000;
+    --encre:#221417;
+    --craie:#f3eeec;
+    --gris:#6b5c5e;
+    --ligne:#e2d8d6;
+    --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+    --corps:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --chiffre:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--corps);
+    background:var(--craie);
+    color:var(--encre);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .page{max-width:460px;margin:0 auto;background:var(--craie);min-height:100vh}
+
+  /* ---------- Tête : le compte à rebours ---------- */
+  .tete{
+    background:var(--rouge-profond);
+    color:#fff;
+    padding:calc(28px + env(safe-area-inset-top)) 24px 30px;
+  }
+  .marque{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:.14em;
+    opacity:.72;
+  }
+  .compte{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-top:26px;
+  }
+  .compte-nombre{
+    font-family:var(--chiffre);
+    font-size:66px;
+    line-height:.85;
+    letter-spacing:-.04em;
+  }
+  .compte-unite{font-size:17px;opacity:.8}
+  .compte-quoi{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:22px;
+    line-height:1.2;
+    margin-top:16px;
+  }
+  .compte-date{
+    font-family:var(--chiffre);
+    font-size:13px;
+    opacity:.78;
+    margin-top:6px;
+  }
+  .previsionnel{
+    display:inline-block;
+    margin-top:18px;
+    font-size:11.5px;
+    line-height:1.35;
+    opacity:.68;
+    border-top:1px solid rgba(255,255,255,.28);
+    padding-top:10px;
+  }
+
+  /* ---------- Listes ---------- */
+  .bloc{padding:30px 24px 6px}
+  .bloc h2{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.06em;
+    color:var(--gris);
+    margin-bottom:4px;
+  }
+  .liste{list-style:none}
+  .liste li{border-bottom:1px solid var(--ligne)}
+  .liste li:last-child{border-bottom:0}
+  a.outil{
+    display:block;
+    padding:18px 2px;
+    text-decoration:none;
+    color:inherit;
+    position:relative;
+  }
+  a.outil:active{background:rgba(192,57,43,.07)}
+  a.outil:focus-visible{outline:2.5px solid var(--rouge);outline-offset:3px;border-radius:3px}
+  .outil-nom{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:19px;
+    line-height:1.25;
+  }
+  .outil-quoi{
+    font-size:13.5px;
+    color:var(--gris);
+    margin-top:3px;
+    max-width:38ch;
+  }
+  .chevron{
+    position:absolute;
+    right:2px;
+    top:50%;
+    width:9px;height:9px;
+    border-right:2px solid var(--rouge);
+    border-bottom:2px solid var(--rouge);
+    transform:translateY(-50%) rotate(-45deg);
+  }
+  /* liste compacte pour les révisions */
+  .liste.dense a.outil{padding:13px 2px}
+  .liste.dense .outil-nom{font-size:16px;font-weight:500}
+
+  .vide{
+    font-size:13.5px;
+    color:var(--gris);
+    padding:14px 0 18px;
+    max-width:40ch;
+  }
+
+  /* ---------- Installation ---------- */
+  .install{
+    margin:26px 24px 0;
+    padding:18px 20px;
+    background:#fff;
+    border-left:3px solid var(--rouge);
+  }
+  .install p{font-size:13.5px;color:var(--gris)}
+  .install strong{color:var(--encre);font-weight:600}
+  .install button{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:15px;
+    color:#fff;
+    background:var(--rouge);
+    border:0;
+    padding:11px 18px;
+    margin-top:12px;
+    border-radius:2px;
+  }
+  .install[hidden]{display:none}
+
+  .pied{
+    padding:32px 24px calc(34px + env(safe-area-inset-bottom));
+    font-size:12.5px;
+    color:var(--gris);
+  }
+  .pied a{color:var(--rouge);text-decoration:none;border-bottom:1px solid rgba(192,57,43,.3)}
+
+  @media (prefers-reduced-motion:no-preference){
+    .compte-nombre{animation:poser .5s cubic-bezier(.2,.7,.3,1) both}
+    @keyframes poser{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="tete">
+    <div class="marque">INFOSES</div>
+    <div id="rebours"></div>
+  </header>
+
+  <section class="bloc">
+    <h2>S'orienter</h2>
+    <ul class="liste">
+      <li><a class="outil" href="./outils/cap-orientation.html">
+        <div class="outil-nom">Test d'orientation</div>
+        <div class="outil-quoi">Cinq questions pour dégager les formations qui correspondent à votre profil.</div>
+        <span class="chevron"></span>
+      </a></li>
+      <li><a class="outil" href="./calendrier.html">
+        <div class="outil-nom">Calendrier des inscriptions</div>
+        <div class="outil-quoi">Toutes les étapes Parcoursup, de l'ouverture à la phase complémentaire.</div>
+        <span class="chevron"></span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section class="bloc">
+    <h2>Réviser</h2>
+    <ul class="liste dense" id="quiz">
+      <!-- Ajoutez ici une ligne par quiz, en copiant ce modèle :
+      <li><a class="outil" href="./outils/quiz-croissance.html">
+        <div class="outil-nom">Sources et défis de la croissance</div>
+        <span class="chevron"></span>
+      </a></li>
+      -->
+    </ul>
+    <p class="vide" id="quiz-vide">Déposez vos fichiers de quiz dans le dossier <code>outils/</code>, puis ajoutez une ligne par quiz dans <code>index.html</code>.</p>
+  </section>
+
+  <div class="install" hidden id="install">
+    <p><strong>Installer l'application</strong><br>Pour la retrouver sur l'écran d'accueil et l'utiliser sans connexion.</p>
+    <button id="install-btn">Installer</button>
+  </div>
+
+  <div class="install" hidden id="install-ios">
+    <p><strong>Installer l'application</strong><br>Touchez le bouton Partager en bas de Safari, puis « Sur l'écran d'accueil ».</p>
+  </div>
+
+  <footer class="pied">
+    Ressources de SES pour la seconde, la première et la terminale.<br>
+    <a href="https://fwalleses.wixsite.com/infoses" target="_blank" rel="noopener">Voir le site complet</a>
+  </footer>
+
+</div>
+
+<script src="./dates.js"></script>
+<script>
+/* ---------- Compte à rebours vers la prochaine échéance ---------- */
+(function(){
+  const cible = document.getElementById('rebours');
+  const jour = d => { const [a,m,j] = d.split('-').map(Number); return new Date(a, m-1, j); };
+  const aujourdhui = (() => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); })();
+
+  // On vise la fin de l'étape si elle est en cours, sinon son début.
+  const echeances = CALENDRIER.etapes
+    .map(e => ({
+      etape: e,
+      quand: jour(e.debut) <= aujourdhui ? jour(e.fin) : jour(e.debut),
+      cloture: jour(e.debut) <= aujourdhui && e.fin !== e.debut
+    }))
+    .filter(x => x.quand >= aujourdhui)
+    .sort((a,b) => a.quand - b.quand);
+
+  if (!echeances.length){
+    cible.innerHTML = '<div class="compte-quoi">La session ' + CALENDRIER.session +
+      ' est terminée.</div><div class="compte-date">Mettez à jour dates.js pour la session suivante.</div>';
+    return;
+  }
+
+  const p = echeances[0];
+  const jours = Math.round((p.quand - aujourdhui) / 86400000);
+  const format = new Intl.DateTimeFormat('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  const libelle = p.cloture ? 'Clôture — ' + p.etape.titre : p.etape.titre;
+
+  let entete;
+  if (jours === 0)      entete = '<div class="compte"><span class="compte-nombre">·</span><span class="compte-unite">c\'est aujourd\'hui</span></div>';
+  else if (jours === 1) entete = '<div class="compte"><span class="compte-nombre">1</span><span class="compte-unite">jour</span></div>';
+  else                  entete = '<div class="compte"><span class="compte-nombre">' + jours + '</span><span class="compte-unite">jours</span></div>';
+
+  cible.innerHTML = entete +
+    '<div class="compte-quoi">' + libelle + '</div>' +
+    '<div class="compte-date">' + format.format(p.quand) + '</div>' +
+    (CALENDRIER.previsionnel
+      ? '<div class="previsionnel">Dates prévisionnelles, calées sur les sessions précédentes. Le calendrier officiel est publié par le ministère à l\'automne.</div>'
+      : '');
+})();
+
+/* ---------- Masquer le message d'aide si des quiz ont été ajoutés ---------- */
+if (document.querySelectorAll('#quiz a').length) {
+  document.getElementById('quiz-vide').hidden = true;
+}
+
+/* ---------- Installation ---------- */
+let invite = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  invite = e;
+  document.getElementById('install').hidden = false;
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (!invite) return;
+  invite.prompt();
+  await invite.userChoice;
+  invite = null;
+  document.getElementById('install').hidden = true;
+});
+
+const estIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const dejaInstallee = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+if (estIOS && !dejaInstallee) document.getElementById('install-ios').hidden = false;
+
+/* ---------- Service worker ---------- */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
+</script>
+</body>
+</html>

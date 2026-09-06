@@ -1,0 +1,44 @@
+{
+  "name": "INFOSES — SES et orientation",
+  "short_name": "INFOSES",
+  "description": "Test d'orientation, calendrier des inscriptions et quiz de SES.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3eeec",
+  "theme_color": "#8b0000",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Test d'orientation",
+      "url": "./outils/cap-orientation.html"
+    },
+    {
+      "name": "Calendrier des inscriptions",
+      "url": "./calendrier.html"
+    }
+  ]
+}

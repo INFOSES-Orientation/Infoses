@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendrier des inscriptions — INFOSES</title>
+<meta name="theme-color" content="#8b0000">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rouge:#c0392b;--rouge-profond:#8b0000;--encre:#221417;
+    --craie:#f3eeec;--gris:#6b5c5e;--ligne:#e2d8d6;
+    --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+    --corps:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --chiffre:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--corps);background:var(--craie);color:var(--encre);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .page{max-width:460px;margin:0 auto;min-height:100vh}
+
+  .tete{background:var(--rouge-profond);color:#fff;padding:calc(20px + env(safe-area-inset-top)) 24px 26px}
+  .retour{
+    display:inline-block;font-family:var(--display);font-weight:700;font-size:13px;
+    letter-spacing:.08em;color:#fff;text-decoration:none;opacity:.72;margin-bottom:20px;
+  }
+  .retour:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  .tete h1{font-family:var(--display);font-weight:800;font-size:29px;line-height:1.1}
+  .tete .session{font-family:var(--chiffre);font-size:13px;opacity:.75;margin-top:8px}
+
+  .avis{
+    background:#fff;border-left:3px solid var(--rouge);
+    margin:0;padding:16px 20px;font-size:13px;color:var(--gris);
+  }
+  .avis a{color:var(--rouge)}
+
+  .fil{padding:12px 24px 40px}
+  .etape{
+    display:grid;grid-template-columns:14px 1fr;gap:16px;
+    padding:20px 0;border-bottom:1px solid var(--ligne);
+  }
+  .etape:last-child{border-bottom:0}
+  .pastille{
+    width:11px;height:11px;border-radius:50%;margin-top:7px;
+    border:2px solid var(--ligne);background:var(--craie);
+  }
+  .etape.cle .pastille{background:var(--rouge);border-color:var(--rouge)}
+  .etape.passee{opacity:.42}
+  .etape.encours .pastille{background:#fff;border-color:var(--rouge);box-shadow:0 0 0 4px rgba(192,57,43,.16)}
+
+  .quand{font-family:var(--chiffre);font-size:12.5px;color:var(--rouge);}
+  .etape.passee .quand{color:var(--gris)}
+  .titre{font-family:var(--display);font-weight:700;font-size:18.5px;line-height:1.25;margin-top:3px}
+  .detail{font-size:14px;color:var(--gris);margin-top:5px;max-width:42ch}
+  .marqueur{
+    display:inline-block;font-family:var(--display);font-weight:700;
+    font-size:11px;letter-spacing:.05em;color:var(--rouge);margin-top:7px;
+  }
+  .etape.passee .marqueur{display:none}
+
+  .pied{padding:0 24px calc(40px + env(safe-area-inset-bottom));font-size:12.5px;color:var(--gris)}
+  .pied a{color:var(--rouge)}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="tete">
+    <a class="retour" href="./index.html">← Accueil</a>
+    <h1>Calendrier des inscriptions</h1>
+    <div class="session" id="session"></div>
+  </header>
+
+  <p class="avis" id="avis" hidden></p>
+
+  <div class="fil" id="fil"></div>
+
+  <footer class="pied">
+    Les dates font foi sur <a href="https://www.parcoursup.gouv.fr" target="_blank" rel="noopener">parcoursup.gouv.fr</a>. En cas d'écart, c'est la plateforme qui a raison.
+  </footer>
+</div>
+
+<script src="./dates.js"></script>
+<script>
+(function(){
+  const jour = d => { const [a,m,j] = d.split('-').map(Number); return new Date(a, m-1, j); };
+  const now = new Date();
+  const auj = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const court = new Intl.DateTimeFormat('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+  const sansAn = new Intl.DateTimeFormat('fr-FR', {day:'numeric', month:'long'});
+
+  document.getElementById('session').textContent = 'Session ' + CALENDRIER.session;
+
+  if (CALENDRIER.previsionnel){
+    const a = document.getElementById('avis');
+    a.hidden = false;
+    a.innerHTML = 'Ces dates sont prévisionnelles : elles reprennent le déroulé des sessions précédentes. ' +
+      'Le calendrier officiel est publié par le ministère à l\'automne et remplacera celui-ci.';
+  }
+
+  const fil = document.getElementById('fil');
+
+  CALENDRIER.etapes.forEach(e => {
+    const d = jour(e.debut), f = jour(e.fin);
+    const passee  = f < auj;
+    const encours = d <= auj && auj <= f && e.debut !== e.fin;
+
+    const periode = (e.debut === e.fin)
+      ? court.format(d)
+      : (d.getFullYear() === f.getFullYear()
+          ? sansAn.format(d) + ' → ' + court.format(f)
+          : court.format(d) + ' → ' + court.format(f));
+
+    let marqueur = '';
+    if (encours){
+      const reste = Math.round((f - auj) / 86400000);
+      marqueur = reste === 0 ? 'Dernier jour' : 'En cours · ' + reste + (reste > 1 ? ' jours restants' : ' jour restant');
+    } else if (!passee && e.cle){
+      marqueur = 'À ne pas rater';
+    }
+
+    const el = document.createElement('article');
+    el.className = 'etape' + (e.cle ? ' cle' : '') + (passee ? ' passee' : '') + (encours ? ' encours' : '');
+    el.innerHTML =
+      '<div class="pastille"></div>' +
+      '<div>' +
+        '<div class="quand">' + periode + '</div>' +
+        '<div class="titre">' + e.titre + '</div>' +
+        '<div class="detail">' + e.detail + '</div>' +
+        (marqueur ? '<div class="marqueur">' + marqueur + '</div>' : '') +
+      '</div>';
+    fil.appendChild(el);
+  });
+})();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
+</script>
+</body>
+</html>
