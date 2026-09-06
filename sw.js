@@ -7,7 +7,7 @@
    en mémoire.
    ========================================================================== */
 
-const VERSION = 'infoses-v1';
+const VERSION = 'infoses-v2';
 
 /* Fichiers mis en cache dès l'installation : l'app démarre hors-ligne
    même si l'élève n'a jamais ouvert ces pages.
