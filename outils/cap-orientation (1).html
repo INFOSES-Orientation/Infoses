@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INFOSES : CAP Orientation</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a0a0a;--s1:#2a1010;--s2:#1a0a0a;
+  --bd:rgba(255,255,255,0.09);
+  --sky:#c0392b;--violet:#8b0000;--amber:#e74c3c;--green:#27ae60;
+  --tx:#f1f5f9;--mu:#64748b;--mu2:#334155;
+  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:15px}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.fu{animation:fu .36s cubic-bezier(.22,1,.36,1) both}
+.fu2{animation:fu .36s .06s cubic-bezier(.22,1,.36,1) both}
+.fu3{animation:fu .36s .12s cubic-bezier(.22,1,.36,1) both}
+.fu4{animation:fu .36s .18s cubic-bezier(.22,1,.36,1) both}
+.page{display:none}.page.on{display:block}
+#wrap{min-height:100vh;display:flex;justify-content:center;padding:0 0 56px}
+.box{width:100%;max-width:500px;padding:24px 16px}
+.prog{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.pt{flex:1;height:3px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,#c0392b,#8b0000);border-radius:4px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.pl{font-size:11px;color:var(--mu);font-weight:600;min-width:28px;text-align:right}
+.sh{text-align:center;margin-bottom:18px}
+.si{font-size:30px;margin-bottom:6px;display:block}
+.sh h2{font-size:19px;font-weight:700;font-family:var(--fh);color:var(--tx);margin-bottom:4px}
+.sh p{font-size:12px;color:var(--mu)}
+.sh .note{font-size:11px;color:#f1948a;background:rgba(192,57,43,.10);border:1px solid rgba(231,76,60,.22);border-radius:8px;padding:7px 10px;margin-top:8px;line-height:1.5;text-align:left}
+.mhint{display:inline-block;background:rgba(139,0,0,.15);color:#f1948a;font-size:11px;padding:2px 10px;border-radius:12px;margin-top:5px;font-weight:500}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.grid1{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:16px}
+.opt{background:var(--s1);border:1.5px solid var(--bd);border-radius:13px;padding:12px 10px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:3px;transition:all .16s;color:var(--tx);font-family:var(--fb);position:relative}
+.opt:hover{border-color:rgba(192,57,43,.32);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.opt.sel{background:rgba(192,57,43,.10);border-color:var(--sky)}
+.oi{font-size:18px;margin-bottom:2px}
+.ol{font-size:12px;font-weight:700;font-family:var(--fh);line-height:1.2}
+.od{font-size:10px;color:var(--mu);line-height:1.3}
+.ck{position:absolute;top:7px;right:8px;font-size:11px;color:var(--sky);font-weight:700;display:none}
+.opt.sel .ck{display:block}
+.btn{background:linear-gradient(135deg,#c0392b,#8b0000);color:#fff;border:none;border-radius:12px;padding:13px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--fb);transition:opacity .18s,transform .14s;width:100%}
+.btn:hover:not(:disabled){transform:translateY(-1px);opacity:.9}
+.btn:disabled{opacity:.28;cursor:not-allowed}
+.btn-g{background:transparent;border:1.5px solid var(--bd);color:var(--mu);border-radius:12px;padding:11px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb);transition:all .16s;white-space:nowrap}
+.btn-g:hover{border-color:rgba(255,255,255,.14);color:var(--tx)}
+.nav{display:flex;gap:8px}.nav .btn{flex:1}
+.rgrid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.rbtn{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:5px 11px;font-size:11px;color:var(--mu);cursor:pointer;transition:all .16s;font-family:var(--fb);font-weight:500}
+.rbtn:hover{border-color:rgba(192,57,43,.32);color:var(--tx)}
+.rbtn.sel{background:rgba(192,57,43,.12);border-color:var(--sky);color:var(--sky);font-weight:600}
+.rsel-info{font-size:10px;color:var(--mu);margin-bottom:10px;font-style:italic}
+.hero{text-align:center;padding:32px 0 18px}
+.hero h1{font-size:28px;font-weight:800;font-family:var(--fh);color:var(--tx);margin-bottom:2px;letter-spacing:-.5px;line-height:1.1}
+.hero h1 span{color:var(--sky)}
+.hsub{font-size:11px;color:var(--sky);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px}
+.hdesc{font-size:13px;color:var(--mu);line-height:1.7;max-width:320px;margin:0 auto}
+.hchips{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:14px 0 22px}
+.hchip{background:rgba(192,57,43,.10);border:1px solid rgba(192,57,43,.22);border-radius:18px;padding:4px 10px;font-size:11px;color:#f1948a;display:flex;gap:4px;align-items:center;font-weight:500}
+.logo-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(192,57,43,.10);border:1px solid rgba(192,57,43,.28);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--sky);font-weight:700;margin-bottom:10px;font-family:var(--fh)}
+.profcard{background:rgba(14,17,23,.8);border:1px solid var(--bd);border-radius:12px;padding:11px 13px;margin-bottom:11px}
+.ptitle{font-size:10px;color:var(--mu);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.pchips{display:flex;flex-wrap:wrap;gap:4px}
+.pchip{background:rgba(51,65,85,.35);border-radius:6px;padding:2px 7px;font-size:11px;color:var(--mu)}
+.pchip b{color:var(--mu2);font-weight:700}
+.flist{display:flex;flex-direction:column;gap:10px}
+
+/* Carte normale */
+.fcard{background:var(--s1);border:1px solid var(--bd);border-radius:15px;padding:13px;display:flex;flex-direction:column;gap:8px;animation:fu .38s cubic-bezier(.22,1,.36,1) both;transition:border-color .18s}
+.fcard:hover{border-color:rgba(192,57,43,.28)}
+
+/* Carte regroupée licences */
+.fcard-group{background:var(--s1);border:1px solid rgba(192,57,43,.35);border-radius:15px;padding:14px;display:flex;flex-direction:column;gap:10px;animation:fu .38s cubic-bezier(.22,1,.36,1) both}
+.fcard-group-header{display:flex;align-items:center;gap:10px}
+.group-badge{background:linear-gradient(135deg,#c0392b,#8b0000);color:#fff;font-size:10px;font-weight:700;border-radius:6px;padding:3px 8px;font-family:var(--fh);white-space:nowrap}
+.group-title{font-size:14px;font-weight:700;font-family:var(--fh);color:var(--tx);line-height:1.2}
+.group-sub{font-size:11px;color:var(--mu);line-height:1.5;margin-top:2px}
+.group-info{background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.18);border-radius:8px;padding:9px 11px;font-size:11px;color:#f1948a;line-height:1.6}
+.group-info strong{color:var(--tx);font-weight:600}
+.subjects-grid{display:flex;flex-wrap:wrap;gap:5px}
+.subj-tag{background:rgba(51,65,85,.5);border:1px solid var(--bd);border-radius:5px;padding:2px 8px;font-size:10px;color:var(--mu)}
+
+/* Carte concours / école */
+.fcard-concours{background:rgba(192,57,43,.05);border:2px solid rgba(192,57,43,.3);border-radius:15px;padding:13px;display:flex;flex-direction:column;gap:8px;animation:fu .38s cubic-bezier(.22,1,.36,1) both}
+.concours-header{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.concours-badge{background:linear-gradient(135deg,#c0392b,#8b0000);color:#fff;font-size:10px;font-weight:700;border-radius:6px;padding:3px 9px;font-family:var(--fh)}
+.concours-title{font-size:13px;font-weight:700;font-family:var(--fh);color:var(--tx)}
+.concours-ecoles{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.ecole-tag{background:rgba(192,57,43,.10);border:1px solid rgba(192,57,43,.25);border-radius:5px;padding:2px 8px;font-size:10px;color:#f1948a;font-weight:600}
+
+.intl-b{display:inline-flex;align-self:flex-start;background:rgba(29,78,216,.15);border:1px solid rgba(29,78,216,.3);border-radius:6px;padding:2px 8px;font-size:10px;color:#60a5fa;font-weight:700}
+.rare-b{display:inline-flex;align-self:flex-start;background:rgba(231,76,60,.10);border:1px solid rgba(231,76,60,.22);border-radius:6px;padding:2px 8px;font-size:10px;color:#e74c3c;font-weight:700;animation:fl 2.5s ease-in-out infinite}
+.ftop{display:flex;align-items:flex-start;gap:8px}
+.fnom{font-size:13px;font-weight:700;font-family:var(--fh);color:var(--tx);line-height:1.2}
+.ftype{font-size:10px;color:var(--mu)}
+.fduree{font-size:10px;color:var(--sky);background:rgba(192,57,43,.12);border-radius:6px;padding:2px 7px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.fmeta{display:flex;gap:12px;flex-wrap:wrap}
+.fml{font-size:9px;color:var(--mu2);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:1px}
+.fmv{font-size:11px;color:var(--mu);font-weight:600}
+.debs{display:flex;flex-wrap:wrap;gap:4px}
+.deb{background:rgba(139,0,0,.12);border:1px solid rgba(139,0,0,.20);border-radius:5px;padding:2px 7px;font-size:10px;color:#f1948a}
+.fplus{display:flex;gap:5px;align-items:flex-start;background:rgba(231,76,60,.06);border-radius:7px;padding:6px 8px}
+.fpluxt{font-size:11px;color:#e74c3c;line-height:1.5}
+.flinks{display:flex;gap:6px;flex-wrap:wrap}
+.lnk{background:rgba(192,57,43,.10);border:1px solid rgba(192,57,43,.28);border-radius:6px;padding:4px 9px;font-size:11px;color:var(--sky);text-decoration:none;font-weight:600;transition:background .16s}
+.lnk:hover{background:rgba(192,57,43,.22)}
+.lnk.g{background:rgba(39,174,96,.10);border-color:rgba(39,174,96,.28);color:var(--green)}
+.lnk.g:hover{background:rgba(39,174,96,.18)}
+.lnk.b{background:rgba(29,78,216,.10);border-color:rgba(29,78,216,.28);color:#60a5fa}
+.lnk.b:hover{background:rgba(29,78,216,.18)}
+.disc{text-align:center;font-size:10px;color:var(--mu2);margin-top:12px}
+.no-res{text-align:center;padding:32px 16px;color:var(--mu);font-size:13px;line-height:1.6}
+.section-title{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin:14px 0 8px;padding-left:2px}
+</style>
+</head>
+<body>
+<div id="wrap"><div class="box">
+
+<div id="p-home" class="page on">
+  <div class="hero fu">
+    <div class="logo-badge">📚 INFOSES</div>
+    <h1>CAP <span>Orientation</span></h1>
+    <p class="hsub">Trouve ta voie après le bac</p>
+    <p class="hdesc">En 5 questions, découvre les formations en France et à l'international qui te correspondent vraiment.</p>
+  </div>
+  <div class="hchips fu2">
+    <div class="hchip"><span>🧭</span><span>Intérêts</span></div>
+    <div class="hchip"><span>📋</span><span>Dossier</span></div>
+    <div class="hchip"><span>💰</span><span>Budget</span></div>
+    <div class="hchip"><span>📍</span><span>Région / Pays</span></div>
+    <div class="hchip"><span>🌍</span><span>International</span></div>
+  </div>
+  <div class="fu3"><button class="btn" onclick="gotoStep(0)">Commencer →</button></div>
+  <p class="disc fu4">Outil indicatif • Liens Onisep & Parcoursup • INFOSES SES</p>
+</div>
+
+<div id="p-q" class="page">
+  <div class="prog"><div class="pt"><div class="pf" id="pf"></div></div><span class="pl" id="pl"></span></div>
+  <div class="sh fu">
+    <span class="si" id="qi"></span>
+    <h2 id="qt"></h2>
+    <p id="qs"></p>
+    <div class="note" id="qnote" style="display:none"></div>
+    <span class="mhint" id="qm" style="display:none">Plusieurs choix possibles</span>
+  </div>
+  <div id="og"></div>
+  <div class="nav fu3">
+    <button class="btn-g" id="bbk" onclick="goBack()" style="display:none">← Retour</button>
+    <button class="btn" id="bnx" onclick="goNext()" disabled>Suivant →</button>
+  </div>
+</div>
+
+<div id="p-reg" class="page">
+  <div class="prog"><div class="pt"><div class="pf" style="width:83%"></div></div><span class="pl">5/6</span></div>
+  <div class="sh fu"><span class="si">📍</span><h2>Où veux-tu étudier ?</h2><p>Plusieurs choix possibles — France et/ou international</p></div>
+  <p class="section-title fu2">🇫🇷 Régions françaises</p>
+  <div class="rgrid fu2" id="rg-france"></div>
+  <p class="section-title fu3">🌍 Destinations internationales</p>
+  <div class="rgrid fu3" id="rg-intl"></div>
+  <p class="rsel-info fu3" id="rsel-info">Aucune destination sélectionnée</p>
+  <div class="sh fu4" style="margin-top:8px"><span class="si">⏱️</span><h2>Durée des études</h2><p>Quelle durée t'imagines-tu ?</p></div>
+  <div class="grid fu4" id="dg"></div>
+  <div class="nav">
+    <button class="btn-g" onclick="gotoStep(3)">← Retour</button>
+    <button class="btn" id="bgen" onclick="showResults()" disabled>Voir mes résultats →</button>
+  </div>
+</div>
+
+<div id="p-res" class="page">
+  <div class="fu" style="text-align:center;margin-bottom:14px">
+    <div style="font-size:32px;margin-bottom:4px">✨</div>
+    <h2 style="font-size:20px;font-weight:700;font-family:var(--fh);color:var(--tx)">Ton orientation</h2>
+  </div>
+  <div class="fu2" style="margin-bottom:11px">
+    <button class="btn-g" style="width:100%" onclick="doPrint()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+  <div class="profcard fu2"><p class="ptitle">📋 Ton profil</p><div class="pchips" id="pchips"></div></div>
+  <div class="flist fu3" id="flist"></div>
+  <div style="margin-top:18px"><button class="btn-g" style="width:100%" onclick="restart()">↺ Recommencer</button></div>
+  <p class="disc">Sélection indicative • Non contractuelle • INFOSES SES</p>
+</div>
+
+</div></div>
+<script>
+// ═══════════════════════════════════════════
+// BASE DE DONNÉES
+// ═══════════════════════════════════════════
+
+// ── LICENCES REGROUPÉES PAR DOMAINE ──
+// Chaque entrée représente un groupe de licences d'un domaine
+const LICENCES_GROUPS = [
+  {
+    id:"lic_sciences",
+    domaines:["sciences"],
+    emoji:"⚗️",
+    titre:"Licences de Sciences",
+    sujets:["Mathématiques","Physique","Chimie","Physique-Chimie","Informatique","Sciences de la Vie","Biologie","Géosciences","MIASHS","Sciences de la Matière"],
+    sel:2, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Enseignant","Chercheur","Data scientist","Ingénieur (après master)"],
+    plus:"Formations fondamentales accessibles dans toutes les universités publiques de France. La licence est une porte d'entrée vers de nombreux masters spécialisés, l'agrégation ou les écoles d'ingénieurs.",
+    selectivite:["tres_bon","bon","assez_bon"],
+    specialisation:["specialise","pluridisciplinaire","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence sciences mathématiques physique",
+    type:"group_licence"
+  },
+  {
+    id:"lic_sante",
+    domaines:["sante","sciences"],
+    emoji:"🩺",
+    titre:"Licences Sciences de la Vie & Santé",
+    sujets:["Sciences de la Vie","Biologie","Biochimie","Sciences de la Santé","PASS","LAS","Sciences Sanitaires et Sociales"],
+    sel:3, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Chercheur","Technicien de laboratoire","Préparateur pharmacie","Enseignant"],
+    plus:"Les licences de sciences de la vie sont présentes dans toutes les universités publiques. Pour accéder aux études de médecine, le PASS et le LAS sont les deux voies d'accès depuis 2020.",
+    selectivite:["tres_bon","bon","assez_bon"],
+    specialisation:["specialise","pluridisciplinaire","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence sciences de la vie biologie santé",
+    type:"group_licence"
+  },
+  {
+    id:"lic_humanites",
+    domaines:["humanites"],
+    emoji:"📚",
+    titre:"Licences de Lettres & Humanités",
+    sujets:["Lettres Modernes","Lettres Classiques","Philosophie","Histoire","Histoire de l'Art","Langues (LLCE)","Langues Étrangères Appliquées (LEA)","Linguistique","Études Culturelles"],
+    sel:2, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Enseignant","Journaliste","Éditeur","Traducteur","Chargé de communication"],
+    plus:"Les licences de lettres et humanités sont accessibles dans toutes les universités publiques françaises. Elles ouvrent vers l'enseignement via le master MEEF, vers l'édition, la culture, le journalisme ou la diplomatie.",
+    selectivite:["tres_bon","bon","assez_bon","mauvais"],
+    specialisation:["specialise","pluridisciplinaire","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence lettres humanités langues université",
+    type:"group_licence"
+  },
+  {
+    id:"lic_social",
+    domaines:["social"],
+    emoji:"🧠",
+    titre:"Licences de Sciences Humaines & Sociales",
+    sujets:["Psychologie","Sociologie","Anthropologie","Droit","Science Politique","AES","Information-Communication","Géographie","Économie-Droit"],
+    sel:2, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Psychologue (bac+5)","Juriste","Chargé d'études","Travailleur social","Fonctionnaire"],
+    plus:"Les licences en sciences humaines et sociales sont proposées dans toutes les universités publiques. La psychologie et le droit nécessitent au minimum un master 2 pour exercer pleinement.",
+    selectivite:["tres_bon","bon","assez_bon","mauvais"],
+    specialisation:["specialise","pluridisciplinaire","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence sciences humaines sociales psychologie droit",
+    type:"group_licence"
+  },
+  {
+    id:"lic_eco",
+    domaines:["eco"],
+    emoji:"📊",
+    titre:"Licences d'Économie & Gestion",
+    sujets:["Économie","Gestion","Administration Économique et Sociale (AES)","Économie-Droit","Économie-Mathématiques","Management","Finance","Comptabilité"],
+    sel:2, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Analyste","Gestionnaire","Comptable","Chargé d'études","Consultant"],
+    plus:"Les licences d'économie et gestion sont présentes dans toutes les universités publiques. Elles offrent un socle solide pour un master en finance, management ou économie.",
+    selectivite:["tres_bon","bon","assez_bon"],
+    specialisation:["specialise","pluridisciplinaire","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence économie gestion AES",
+    type:"group_licence"
+  },
+  {
+    id:"lic_arts",
+    domaines:["arts"],
+    emoji:"🎨",
+    titre:"Licences d'Arts & Culture",
+    sujets:["Arts Plastiques","Arts du Spectacle","Cinéma","Musicologie","Histoire de l'Art et Archéologie","Médiation Culturelle","Design","Architecture (après MANAA)"],
+    sel:2, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Médiateur culturel","Chargé de production","Critique","Régisseur","Enseignant d'arts"],
+    plus:"Les licences arts et culture sont présentes dans la plupart des universités publiques. Pour les formations artistiques professionnelles (design, beaux-arts), les écoles nationales offrent un complément indispensable.",
+    selectivite:["tres_bon","bon","assez_bon","mauvais"],
+    specialisation:["specialise","pluridisciplinaire","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence arts culture cinéma musicologie",
+    type:"group_licence"
+  },
+  {
+    id:"lic_tech",
+    domaines:["tech"],
+    emoji:"💻",
+    titre:"Licences d'Informatique & Numérique",
+    sujets:["Informatique","MIASHS","Mathématiques-Informatique","Réseaux et Télécoms","Systèmes Informatiques","Intelligence Artificielle","Science des Données"],
+    sel:3, cout:"~400€/an", duree_label:"3 ans (Bac+3)",
+    debouches:["Développeur","Data scientist","Analyste","DevOps","Chercheur en IA"],
+    plus:"Les licences informatiques sont accessibles dans toutes les universités publiques. Elles offrent une formation théorique solide indispensable pour les masters en IA, cybersécurité ou ingénierie logicielle.",
+    selectivite:["tres_bon","bon","assez_bon"],
+    specialisation:["specialise","progressif"],
+    finances:["public","moderee","libre"],
+    duree:["moyenne","longue","indifferent"],
+    destinations:["france"],
+    parcoursup:true,
+    onisep:"licence informatique numérique IA",
+    type:"group_licence"
+  },
+];
+
+// ── FORMATIONS SPÉCIALISÉES ──
+const DB_SPECIAL = [
+  // SANTÉ
+  {nom:"PASS — Parcours Accès Spécifique Santé",type:"Accès études de santé",pays:"France",duree:"1 an + études de santé",sel:5,cout:"~400€/an",debouches:["Médecin","Pharmacien","Chirurgien-dentiste","Sage-femme"],plus:"Voie principale pour accéder aux études de médecine. Très sélectif, exige d'excellentes notes en biologie et chimie.",emoji:"🩺",onisep:"PASS parcours accès santé médecine",rare:false,parcoursup:true,url:null,domaines:["sante","sciences"],selectivite:["tres_bon"],specialisation:["specialise"],finances:["public","moderee","libre"],duree:["longue","indifferent"],destinations:["france"],type:"special"},
+  {nom:"LAS — Licence Accès Santé",type:"Licence avec option santé",pays:"France",duree:"3 ans + études de santé",sel:4,cout:"~400€/an",debouches:["Médecin","Pharmacien","Kinésithérapeute"],plus:"Alternative au PASS : tu prépares une licence classique avec une option santé. Moins risqué car tu obtiens un diplôme même sans intégrer les études de santé.",emoji:"💊",onisep:"LAS licence accès santé",rare:true,parcoursup:true,url:null,domaines:["sante","sciences"],selectivite:["tres_bon","bon"],specialisation:["specialise","progressif"],finances:["public","moderee","libre"],duree:["longue","indifferent"],destinations:["france"],type:"special"},
+
+  // CLASSES PRÉPA GÉNÉRALES
+  {nom:"Classe prépa Hypokhâgne / Khâgne (HK/B/L)",type:"Classe préparatoire littéraire",pays:"France",duree:"2 ans + concours",sel:5,cout:"Gratuit",debouches:["Enseignant","Journaliste","Haut fonctionnaire","Chercheur"],plus:"Formation d'excellence en lettres, philo, histoire. Prépare aux ENS et IEP. Exige un très bon niveau en français et culture générale.",emoji:"📖",onisep:"classe prépa hypokhâgne khâgne lettres",rare:false,parcoursup:true,url:null,domaines:["humanites","social"],selectivite:["tres_bon"],specialisation:["pluridisciplinaire","progressif"],finances:["libre","moderee","public"],duree:["longue","indifferent"],destinations:["france"],type:"special"},
+  {nom:"CPES — Cycle Pluridisciplinaire d'Études Supérieures",type:"Cycle sélectif en lycée",pays:"France",duree:"3 ans (Bac+3)",sel:5,cout:"~400€/an",debouches:["Grandes écoles","Sciences Po","ENS","Master"],plus:"Formation d'élite peu connue dans des lycées comme Henri-IV ou Condorcet. Très pluridisciplinaire, ouvre toutes les portes.",emoji:"🏛️",onisep:"CPES cycle pluridisciplinaire études supérieures",rare:true,parcoursup:true,url:null,domaines:["humanites","social","sciences","eco"],selectivite:["tres_bon"],specialisation:["pluridisciplinaire"],finances:["public","moderee","libre"],duree:["longue","indifferent"],destinations:["france"],type:"special"},
+  {nom:"Institut d'Études Politiques — Sciences Po",type:"Grande école de sciences politiques",pays:"France",duree:"5 ans (Bac+5)",sel:5,cout:"Selon revenus (0-14 000€/an)",debouches:["Diplomate","Journaliste","Consultant","Haut fonctionnaire"],plus:"Référence mondiale en sciences politiques. Réseau exceptionnel. Exige un excellent dossier général et de bonnes compétences rédactionnelles.",emoji:"🌐",onisep:"sciences po IEP études politiques",rare:false,parcoursup:true,url:null,domaines:["social","humanites","eco"],selectivite:["tres_bon"],specialisation:["pluridisciplinaire"],finances:["libre","moderee"],duree:["longue","indifferent"],destinations:["france"],type:"special"},
+
+  // BTS & BUT
+  {nom:"BTS — Brevet de Technicien Supérieur",type:"Formation courte professionnalisante",pays:"France",duree:"2 ans (Bac+2)",sel:2,cout:"~400€/an",debouches:["Technicien spécialisé","Assistant","Chargé de secteur"],plus:"Plus de 100 spécialités disponibles (commerce, santé, informatique, design, tourisme…). Formation rapide et très opérationnelle, accessible sur Parcoursup.",emoji:"🎯",onisep:"BTS brevet technicien supérieur",rare:false,parcoursup:true,url:null,domaines:["sciences","sante","eco","arts","tech","ingenierie","social","humanites"],selectivite:["bon","assez_bon","mauvais"],specialisation:["specialise"],finances:["public","moderee","libre"],duree:["courte","indifferent"],destinations:["france"],type:"special"},
+  {nom:"BUT — Bachelor Universitaire de Technologie",type:"Formation universitaire technologique",pays:"France",duree:"3 ans (Bac+3)",sel:3,cout:"~400€/an",debouches:["Technicien","Analyste","Responsable de secteur"],plus:"Plus de 25 spécialités (informatique, gestion, biologie, génie civil, MMI…). Alternance possible, insertion rapide, poursuite en master possible.",emoji:"🔧",onisep:"BUT bachelor universitaire technologie",rare:false,parcoursup:true,url:null,domaines:["sciences","sante","eco","arts","tech","ingenierie"],selectivite:["bon","assez_bon"],specialisation:["specialise"],finances:["public","moderee","libre"],duree:["courte","moyenne","indifferent"],destinations:["france"],type:"special"},
+
+  // INGÉNIERIE — PRÉPAS ET CONCOURS
+  {nom:"Classe prépa MPSI/MP — Concours Polytechnique, Centrale, Mines",type:"Classe préparatoire scientifique",pays:"France",duree:"2 ans + grandes écoles",sel:5,cout:"Gratuit",
+   debouches:["Ingénieur","Chercheur","Manager technique","Entrepreneur"],
+   plus:"Voie royale vers les plus grandes écoles d'ingénieurs françaises. Exige d'excellentes notes en maths et physique (>16).",
+   emoji:"⚗️",onisep:"classe prépa MPSI MP scientifique",rare:false,parcoursup:true,url:null,
+   domaines:["ingenierie","sciences","tech"],selectivite:["tres_bon"],specialisation:["specialise"],
+   finances:["libre","moderee","public"],duree:["longue","indifferent"],destinations:["france"],type:"concours_ingenieur",
+   concours_label:"Concours Grandes Écoles d'Ingénieurs",
+   ecoles:["Polytechnique (X)","École Normale Supérieure","Centrale Paris","Mines ParisTech","Ponts et Chaussées","CentraleSupélec","ENSTA","Arts et Métiers (ENSAM)","INSA","Grenoble INP","Télécom Paris","ISAE-SUPAERO"]
+  },
+  {nom:"Classe prépa PCSI/PC — Concours Centrale, Mines, Arts et Métiers",type:"Classe préparatoire scientifique",pays:"France",duree:"2 ans + grandes écoles",sel:5,cout:"Gratuit",
+   debouches:["Ingénieur en industrie","Chef de projet","Consultant technique","Chercheur"],
+   plus:"Forte en physique et chimie. Prépare aux écoles d'ingénieurs généralistes et spécialisées. Alternative solide à la filière MP.",
+   emoji:"⚙️",onisep:"classe prépa PCSI PC physique chimie",rare:false,parcoursup:true,url:null,
+   domaines:["ingenierie","sciences"],selectivite:["tres_bon"],specialisation:["specialise"],
+   finances:["libre","moderee","public"],duree:["longue","indifferent"],destinations:["france"],type:"concours_ingenieur",
+   concours_label:"Concours Centrale-Supélec & Arts et Métiers",
+   ecoles:["CentraleSupélec","Mines ParisTech","Arts et Métiers (ENSAM)","ENSTA","Grenoble INP","INSA Lyon","ECE Paris","ESIEE Paris","ESTP"]
+  },
+  {nom:"Classe prépa BCPST — Concours Agro-Véto et ENS",type:"Classe préparatoire biologie",pays:"France",duree:"2 ans + grandes écoles",sel:5,cout:"Gratuit",
+   debouches:["Vétérinaire","Agronome","Ingénieur agri-alimentaire","Chercheur en biologie"],
+   plus:"Prépare aux écoles vétérinaires, aux écoles d'agronomie et aux ENS. Idéale si tu combines biologie, chimie et sciences de la terre.",
+   emoji:"🌱",onisep:"classe prépa BCPST biologie agronomie vétérinaire",rare:false,parcoursup:true,url:null,
+   domaines:["ingenierie","sciences","sante"],selectivite:["tres_bon"],specialisation:["specialise"],
+   finances:["libre","moderee","public"],duree:["longue","indifferent"],destinations:["france"],type:"concours_ingenieur",
+   concours_label:"Concours Agro-Véto & ENS",
+   ecoles:["AgroParisTech","ENVT (École Vétérinaire Toulouse)","ENVA (Maisons-Alfort)","Agro Montpellier","ENS Paris","ENS Lyon","Bordeaux Sciences Agro","VetAgro Sup"]
+  },
+  {nom:"Classe prépa MP2I — Concours écoles du numérique",type:"Classe préparatoire informatique",pays:"France",duree:"2 ans + grandes écoles",sel:5,cout:"Gratuit",
+   debouches:["Ingénieur informatique","Chercheur en IA","Architecte systèmes","Data scientist senior"],
+   plus:"Nouvelle prépa créée en 2021, spécialisée en maths, physique et informatique. Donne accès aux meilleures écoles d'ingénieurs du numérique.",
+   emoji:"🤖",onisep:"classe prépa MP2I informatique numérique",rare:true,parcoursup:true,url:null,
+   domaines:["tech","ingenierie","sciences"],selectivite:["tres_bon"],specialisation:["specialise"],
+   finances:["libre","moderee","public"],duree:["longue","indifferent"],destinations:["france"],type:"concours_ingenieur",
+   concours_label:"Concours Grandes Écoles du Numérique",
+   ecoles:["Télécom Paris","ENSIMAG","CentraleSupélec","EPITA","EURECOM","IMT Atlantique","Télécom SudParis","EFREI","ENSEIRB-MATMECA"]
+  },
+  {nom:"PEIP — Parcours Étudiant Ingénieur Préparatoire",type:"Prépa intégrée en école d'ingénieurs",pays:"France",duree:"5 ans (Bac+5)",sel:3,cout:"~600€/an",
+   debouches:["Ingénieur","Chef de projet","Responsable technique"],
+   plus:"Intégration directe dans une école d'ingénieurs après Parcoursup. Moins stressant que la prépa classique avec un filet de sécurité universitaire.",
+   emoji:"🏗️",onisep:"PEIP parcours ingénieur préparatoire école",rare:true,parcoursup:true,url:null,
+   domaines:["ingenierie","sciences"],selectivite:["bon","assez_bon"],specialisation:["specialise"],
+   finances:["public","moderee","libre"],duree:["longue","indifferent"],destinations:["france"],type:"concours_ingenieur",
+   concours_label:"Intégration directe (pas de concours post-prépa)",
+   ecoles:["INSA Lyon","INSA Toulouse","INSA Rennes","Grenoble INP","IMT Atlantique","ENSIIE","ENSC Bordeaux","Polytech (réseau national)"]
+  },
+  {nom:"CUPGE — Cycle Univ. Préparatoire aux Grandes Écoles",type:"Prépa universitaire",pays:"France",duree:"2 ans + école ingénieurs",sel:4,cout:"~400€/an",
+   debouches:["Ingénieur","Manager","Chercheur"],
+   plus:"Alternative à la prépa classique basée à l'université. Moins de pression, avec accès garanti à une école d'ingénieurs partenaire.",
+   emoji:"🏛️",onisep:"CUPGE prépa universitaire grandes écoles",rare:true,parcoursup:true,url:null,
+   domaines:["sciences","ingenierie"],selectivite:["tres_bon","bon"],specialisation:["specialise","progressif"],
+   finances:["public","moderee","libre"],duree:["longue","indifferent"],destinations:["france"],type:"concours_ingenieur",
+   concours_label:"Intégration école partenaire garantie",
+   ecoles:["Polytech Paris","Polytech Lille","Polytech Lyon","ESIEE Paris","IMT Nord Europe","ECE Paris","ESEO"]
+  },
+
+  // COMMERCE — PRÉPAS ET CONCOURS
+  {nom:"Classe prépa ECG — Concours HEC, ESSEC, ESCP",type:"Classe préparatoire économique et commerciale",pays:"France",duree:"2 ans + grandes écoles",sel:5,cout:"Gratuit",
+   debouches:["Manager","Consultant","Banquier d'affaires","Entrepreneur","Diplomate"],
+   plus:"La voie royale vers les grandes écoles de commerce françaises. Exige un excellent dossier général et de bonnes compétences en maths, économie et culture générale.",
+   emoji:"📊",onisep:"classe prépa économique commerciale ECG grandes écoles commerce",rare:false,parcoursup:true,url:null,
+   domaines:["eco","social"],selectivite:["tres_bon"],specialisation:["specialise","progressif"],
+   finances:["libre","moderee","public"],duree:["longue","indifferent"],destinations:["france"],type:"concours_commerce",
+   concours_label:"Concours BCE & Écricome",
+   ecoles:["HEC Paris","ESSEC Business School","ESCP Europe","EM Lyon","EDHEC","Audencia","Grenoble École de Management","Kedge Business School","SKEMA","ICN Business School","Montpellier BS"]
+  },
+  {nom:"Admission post-bac directe — Grandes Écoles de Commerce",type:"Bachelor en école de commerce",pays:"France",duree:"3 à 5 ans",sel:4,cout:"8 000-15 000€/an",
+   debouches:["Manager","Entrepreneur","Responsable marketing","Consultant","Chef de projet"],
+   plus:"Admission directe après le bac sans passer par la prépa. Les bachelors des grandes écoles de commerce sont de plus en plus reconnus, avec des frais élevés mais des bourses possibles.",
+   emoji:"🏦",onisep:"bachelor école de commerce admission post bac",rare:false,parcoursup:true,url:null,
+   domaines:["eco"],selectivite:["tres_bon","bon"],specialisation:["specialise"],
+   finances:["libre"],duree:["moyenne","longue","indifferent"],destinations:["france"],type:"concours_commerce",
+   concours_label:"Concours Post-Bac Directs",
+   ecoles:["IPAG Business School","ISC Paris","INSEEC","Excelia Group","ESDES Lyon","EDC Paris","Sup de Co La Rochelle","Brest Business School","ICN (Bachelor)","ESC Pau"]
+  },
+  {nom:"BUT GEA + Licence Pro — Voie universitaire en gestion",type:"Parcours universitaire en gestion",pays:"France",duree:"3 ans (Bac+3)",sel:2,cout:"~400€/an",
+   debouches:["Comptable","Assistant de gestion","Responsable RH","Contrôleur de gestion"],
+   plus:"La voie universitaire publique en gestion. Le BUT GEA suivi d'une Licence Pro ou d'un master permet d'atteindre des postes de cadres à moindre coût.",
+   emoji:"🏢",onisep:"BUT GEA gestion entreprises licence professionnelle",rare:false,parcoursup:true,url:null,
+   domaines:["eco"],selectivite:["bon","assez_bon","mauvais"],specialisation:["specialise"],
+   finances:["public","moderee","libre"],duree:["courte","moyenne","indifferent"],destinations:["france"],type:"concours_commerce",
+   concours_label:"Sélection sur dossier Parcoursup",
+   ecoles:["IUT de Paris","IUT de Lyon","IUT de Bordeaux","IUT de Marseille","IUT de Lille","IUT de Nantes","IUT de Toulouse","IUT de Strasbourg"]
+  },
+
+  // INTERNATIONAL
+  {nom:"Université de Montréal / Université Laval",type:"Université francophone",pays:"🇨🇦 Canada — Québec",duree:"3-4 ans",sel:3,cout:"~7 000€/an",debouches:["Selon spécialité","Professionnel au Québec","Chercheur"],plus:"Les deux grandes universités francophones du Québec. Accessibles aux lycéens français, en français, avec des frais bien inférieurs aux USA. Nombreuses filières : droit, médecine, ingénierie, gestion, sciences.",emoji:"🍁",onisep:"université Montréal Laval Québec",rare:false,parcoursup:false,url:"https://www.umontreal.ca/etudes/",domaines:["sciences","social","humanites","eco","sante","ingenierie"],selectivite:["tres_bon","bon","assez_bon"],specialisation:["specialise","pluridisciplinaire","progressif"],finances:["libre","moderee"],duree:["moyenne","longue","indifferent"],destinations:["canada"],type:"special"},
+  {nom:"HEC Montréal — Business School francophone",type:"École de commerce",pays:"🇨🇦 Canada — Montréal",duree:"3 ans (BBA)",sel:4,cout:"~9 000€/an",debouches:["Manager","Consultant","Entrepreneur","Analyste financier"],plus:"L'une des meilleures business schools francophones d'Amérique du Nord. Réseau fort au Québec et à l'international. Double diplôme possible avec des écoles françaises.",emoji:"🏦",onisep:"HEC Montréal business administration",rare:true,parcoursup:false,url:"https://www.hec.ca/admission/",domaines:["eco"],selectivite:["tres_bon","bon"],specialisation:["specialise"],finances:["libre","moderee"],duree:["moyenne","indifferent"],destinations:["canada"],type:"special"},
+  {nom:"McGill University — Montréal",type:"Université de recherche",pays:"🇨🇦 Canada — Montréal",duree:"3-4 ans",sel:5,cout:"~15 000€/an",debouches:["Chercheur","Médecin","Avocat","Ingénieur"],plus:"Classée parmi les 30 meilleures universités mondiales. Enseignement en anglais. Idéale si tu vises une carrière internationale ou un doctorat.",emoji:"🎓",onisep:"McGill university Montreal",rare:false,parcoursup:false,url:"https://www.mcgill.ca/applying/",domaines:["sciences","sante","ingenierie","social","humanites"],selectivite:["tres_bon"],specialisation:["specialise","progressif"],finances:["libre"],duree:["moyenne","longue","indifferent"],destinations:["canada"],type:"special"},
+  {nom:"Community College + Transfer University",type:"Parcours universitaire américain",pays:"🇺🇸 États-Unis",duree:"2 + 2 ans",sel:1,cout:"~8 000€/an",debouches:["Transfert université américaine","Selon spécialité"],plus:"Entrée accessible dans le système universitaire américain avec des frais réduits. Permet de rejoindre une université de rang mondial via un transfert après 2 ans.",emoji:"🇺🇸",onisep:"community college états-unis",rare:true,parcoursup:false,url:"https://www.collegeboard.org/",domaines:["sciences","eco","tech","social","humanites","arts"],selectivite:["bon","assez_bon","mauvais"],specialisation:["progressif","pluridisciplinaire"],finances:["libre","moderee"],duree:["longue","indifferent"],destinations:["usa"],type:"special"},
+  {nom:"University of California — UC System",type:"Université publique de recherche",pays:"🇺🇸 États-Unis",duree:"4 ans",sel:4,cout:"~35 000€/an",debouches:["Chercheur","Ingénieur","Manager","Médecin"],plus:"Le système UC (Berkeley, UCLA, San Diego…) est parmi les meilleurs au monde. Frais élevés mais aides disponibles. Enseignement en anglais.",emoji:"🌞",onisep:"University of California système universitaire américain",rare:false,parcoursup:false,url:"https://www.universityofcalifornia.edu/apply",domaines:["sciences","tech","ingenierie","eco","social"],selectivite:["tres_bon"],specialisation:["specialise","progressif"],finances:["libre"],duree:["longue","indifferent"],destinations:["usa"],type:"special"},
+  {nom:"Universités néerlandaises — Bachelors en anglais",type:"Université publique européenne",pays:"🇳🇱 Pays-Bas",duree:"3 ans (Bachelor)",sel:3,cout:"~2 200€/an",debouches:["Selon spécialité","Emploi européen","Doctorat"],plus:"Amsterdam, Leiden, Delft proposent des centaines de bachelors en anglais à des frais très bas. Reconnues parmi les 100 meilleures mondiales.",emoji:"🌷",onisep:"université Pays-Bas Amsterdam Leiden",rare:true,parcoursup:false,url:"https://www.studyfinder.nl/",domaines:["sciences","tech","ingenierie","eco","social","humanites"],selectivite:["tres_bon","bon"],specialisation:["specialise","pluridisciplinaire","progressif"],finances:["libre","moderee"],duree:["moyenne","indifferent"],destinations:["europe"],type:"special"},
+  {nom:"Universités allemandes — Études quasi gratuites",type:"Université publique",pays:"🇩🇪 Allemagne",duree:"3-5 ans",sel:3,cout:"~300€/semestre",debouches:["Ingénieur","Chercheur","Manager"],plus:"La plupart des universités publiques allemandes sont quasi-gratuites. Excellence reconnue en ingénierie, sciences et médecine. Programmes en anglais et en allemand.",emoji:"🎻",onisep:"université Allemagne études gratuites",rare:true,parcoursup:false,url:"https://www.daad.de/fr/",domaines:["sciences","ingenierie","tech","sante","eco"],selectivite:["tres_bon","bon"],specialisation:["specialise","progressif"],finances:["public","moderee","libre"],duree:["moyenne","longue","indifferent"],destinations:["europe"],type:"special"},
+  {nom:"IE University / ESADE — Espagne",type:"Grande école privée",pays:"🇪🇸 Espagne",duree:"4 ans (Bachelor)",sel:4,cout:"~18 000€/an",debouches:["Manager","Entrepreneur","Consultant"],plus:"IE et ESADE sont classées parmi les meilleures business schools européennes. Enseignement en anglais, campus cosmopolite, fort réseau en Europe et Amérique latine.",emoji:"🌞",onisep:"IE University ESADE Espagne business",rare:true,parcoursup:false,url:"https://www.ie.edu/university/",domaines:["eco","social"],selectivite:["tres_bon","bon"],specialisation:["specialise"],finances:["libre"],duree:["longue","indifferent"],destinations:["europe"],type:"special"},
+  {nom:"Trinity College Dublin / Universités irlandaises",type:"Université de recherche",pays:"🇮🇪 Irlande",duree:"3-4 ans",sel:4,cout:"~15 000€/an",debouches:["Chercheur","Ingénieur","Avocat"],plus:"L'une des plus prestigieuses universités d'Europe. Enseignement en anglais, hub des entreprises tech. Porte d'entrée vers les USA et l'international.",emoji:"🍀",onisep:"Trinity College Dublin Irlande",rare:false,parcoursup:false,url:"https://www.tcd.ie/study/",domaines:["sciences","tech","social","humanites","ingenierie"],selectivite:["tres_bon","bon"],specialisation:["specialise","progressif"],finances:["libre","moderee"],duree:["moyenne","longue","indifferent"],destinations:["europe"],type:"special"},
+  {nom:"Universités scandinaves — Suède / Danemark",type:"Université publique",pays:"🇸🇪 Scandinavie",duree:"3 ans (Bachelor)",sel:3,cout:"~0-2 000€/an (souvent gratuit UE)",debouches:["Chercheur","Designer","Ingénieur"],plus:"Stockholm, Copenhague, Lund : excellentes et souvent gratuites pour les étudiants européens. Très bien classées, nombreux programmes en anglais. Qualité de vie exceptionnelle.",emoji:"🌊",onisep:"université Suède Danemark Scandinavie",rare:true,parcoursup:false,url:"https://www.universityadmissions.se/",domaines:["sciences","tech","ingenierie","eco","arts"],selectivite:["tres_bon","bon"],specialisation:["specialise","pluridisciplinaire"],finances:["public","moderee","libre"],duree:["moyenne","indifferent"],destinations:["europe"],type:"special"},
+];
+
+// ═══════════════════════════════════════
+// QUESTIONS
+// ═══════════════════════════════════════
+const STEPS=[
+  {id:"domaine",title:"Ton univers intellectuel",subtitle:"Quel domaine te fait vibrer ?",icon:"🧭",multi:true,note:null,gridClass:"grid",options:[
+    {id:"sciences",label:"Sciences & Maths",icon:"⚗️",desc:"Physique, chimie, bio, maths…"},
+    {id:"sante",label:"Santé & Médecine",icon:"🩺",desc:"Médecine, pharmacie, kiné…"},
+    {id:"humanites",label:"Humanités",icon:"📚",desc:"Philo, lettres, histoire, langues…"},
+    {id:"social",label:"Sciences humaines",icon:"🧠",desc:"Psycho, socio, sciences po, droit…"},
+    {id:"eco",label:"Éco & Business",icon:"📊",desc:"Économie, gestion, finance…"},
+    {id:"arts",label:"Arts & Culture",icon:"🎨",desc:"Beaux-arts, cinéma, design…"},
+    {id:"tech",label:"Tech & Numérique",icon:"💻",desc:"Informatique, IA, cybersécurité…"},
+    {id:"ingenierie",label:"Ingénierie",icon:"⚙️",desc:"Mécanique, électronique, BTP…"},
+  ]},
+  {id:"selectivite",title:"Ton dossier scolaire",subtitle:"Quelle est ta moyenne générale ?",icon:"📋",multi:false,
+   note:"⚠️ Au-delà de la moyenne générale, certaines formations exigent d'excellentes notes dans des disciplines spécifiques : maths pour les prépas scientifiques, français/philosophie pour les classes littéraires, biologie/chimie pour les études de santé.",
+   gridClass:"grid1",options:[
+    {id:"tres_bon",label:"Très bon dossier",icon:"🏆",desc:"Moyenne supérieure à 18/20"},
+    {id:"bon",label:"Bon dossier",icon:"✅",desc:"Moyenne entre 15 et 18/20"},
+    {id:"assez_bon",label:"Assez bon dossier",icon:"📈",desc:"Moyenne entre 12 et 15/20"},
+    {id:"mauvais",label:"Dossier difficile",icon:"💪",desc:"Moyenne inférieure à 12/20 — mais motivé(e) !"},
+  ]},
+  {id:"specialisation",title:"Spécialisation ou ouverture ?",subtitle:"Comment tu envisages tes études ?",icon:"🔭",multi:false,note:null,gridClass:"grid",options:[
+    {id:"specialise",label:"Me spécialiser",icon:"🎯",desc:"Un métier précis, une expertise pointue"},
+    {id:"pluridisciplinaire",label:"Pluridisciplinaire",icon:"🌐",desc:"Plusieurs domaines, portes ouvertes"},
+    {id:"progressif",label:"Décider plus tard",icon:"🗺️",desc:"Commencer large puis se spécialiser"},
+  ]},
+  {id:"finances",title:"Contrainte financière",subtitle:"Le coût des études est-il un facteur ?",icon:"💰",multi:false,note:null,gridClass:"grid",options:[
+    {id:"libre",label:"Pas de contrainte",icon:"🟢",desc:"Écoles privées / international envisageables"},
+    {id:"moderee",label:"Budget modéré",icon:"🟡",desc:"Frais limités, pas les très grandes écoles privées"},
+    {id:"public",label:"Public uniquement",icon:"🔴",desc:"Frais universitaires (~200-700€/an)"},
+  ]},
+];
+const DUREE=[
+  {id:"courte",label:"Études courtes (2-3 ans)",icon:"⚡",desc:"BTS, BUT — insertion rapide"},
+  {id:"moyenne",label:"Durée standard (3-5 ans)",icon:"📖",desc:"Licence, master, école en 3-5 ans"},
+  {id:"longue",label:"Études longues (5-8 ans)",icon:"🎓",desc:"Médecine, grandes écoles…"},
+  {id:"indifferent",label:"Peu importe",icon:"♾️",desc:"La durée n'est pas un critère"},
+];
+const REGIONS_FR=["Toute la France","Île-de-France","Auvergne-Rhône-Alpes","Hauts-de-France","Nouvelle-Aquitaine","Occitanie","Provence-Alpes-Côte d'Azur","Grand Est","Bretagne","Pays de la Loire","Normandie","Bourgogne-Franche-Comté","Centre-Val de Loire","Corse","DOM-TOM"];
+const REGIONS_INTL=[{id:"canada",label:"🇨🇦 Canada"},{id:"usa",label:"🇺🇸 États-Unis"},{id:"europe",label:"🇪🇺 Europe (hors France)"}];
+const LABELS={
+  domaine:{sciences:"Sciences & Maths",sante:"Santé & Médecine",humanites:"Humanités",social:"Sciences humaines",eco:"Éco & Business",arts:"Arts & Culture",tech:"Tech & Numérique",ingenierie:"Ingénierie"},
+  selectivite:{tres_bon:"Très bon (>18)",bon:"Bon (15-18)",assez_bon:"Assez bon (12-15)",mauvais:"Dossier difficile (<12)"},
+  specialisation:{specialise:"Se spécialiser",pluridisciplinaire:"Pluridisciplinaire",progressif:"Décider plus tard"},
+  finances:{libre:"Pas de contrainte",moderee:"Budget modéré",public:"Public uniquement"},
+  duree:{courte:"Études courtes",moyenne:"Durée standard",longue:"Études longues",indifferent:"Peu importe"},
+};
+
+// ═══════════════════════════════════════
+// ÉTAT
+// ═══════════════════════════════════════
+let step=-1, answers={}, duree=null, selectedRegions=new Set(["Toute la France"]);
+const T=STEPS.length+2;
+
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function gotoStep(n){step=n;if(n<0){show('p-home');return;}if(n===STEPS.length){renderReg();show('p-reg');return;}renderQ(n);show('p-q');}
+function goNext(){if(step<STEPS.length-1)gotoStep(step+1);else gotoStep(STEPS.length);}
+function goBack(){if(step>0)gotoStep(step-1);}
+function restart(){answers={};duree=null;selectedRegions=new Set(["Toute la France"]);gotoStep(-1);}
+
+function renderQ(i){
+  const s=STEPS[i],pct=Math.round((i+1)/T*100),sel=answers[s.id]||[];
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('pl').textContent=(i+1)+'/'+T;
+  document.getElementById('qi').textContent=s.icon;
+  document.getElementById('qt').textContent=s.title;
+  document.getElementById('qs').textContent=s.subtitle;
+  const ne=document.getElementById('qnote');
+  if(s.note){ne.textContent=s.note;ne.style.display='block';}else ne.style.display='none';
+  document.getElementById('qm').style.display=s.multi?'inline-block':'none';
+  document.getElementById('bbk').style.display=i>0?'':'none';
+  const g=document.getElementById('og');g.innerHTML='';
+  const w=document.createElement('div');w.className=s.gridClass;
+  s.options.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='opt'+(sel.includes(o.id)?' sel':'');
+    b.innerHTML=`<span class="oi">${o.icon}</span><span class="ol">${o.label}</span><span class="od">${o.desc}</span><span class="ck">✓</span>`;
+    b.onclick=()=>{
+      if(s.multi){if(answers[s.id]?.includes(o.id))answers[s.id]=answers[s.id].filter(x=>x!==o.id);else{answers[s.id]=answers[s.id]||[];answers[s.id].push(o.id);}}
+      else answers[s.id]=[o.id];
+      renderQ(i);
+    };
+    w.appendChild(b);
+  });
+  g.appendChild(w);
+  document.getElementById('bnx').disabled=!(answers[s.id]||[]).length;
+}
+
+function toggleRegion(r,isIntl=false){
+  if(!isIntl){
+    if(r==="Toute la France"){selectedRegions=new Set(["Toute la France"]);}
+    else{selectedRegions.delete("Toute la France");if(selectedRegions.has(r))selectedRegions.delete(r);else selectedRegions.add(r);if(selectedRegions.size===0)selectedRegions.add("Toute la France");}
+  } else {
+    if(selectedRegions.has(r))selectedRegions.delete(r);else selectedRegions.add(r);
+  }
+  renderReg();
+}
+
+function renderReg(){
+  const rg=document.getElementById('rg-france');rg.innerHTML='';
+  REGIONS_FR.forEach(r=>{const b=document.createElement('button');b.className='rbtn'+(selectedRegions.has(r)?' sel':'');b.textContent=(selectedRegions.has(r)?'✓ ':'')+r;b.onclick=()=>toggleRegion(r,false);rg.appendChild(b);});
+  const ri=document.getElementById('rg-intl');ri.innerHTML='';
+  REGIONS_INTL.forEach(r=>{const b=document.createElement('button');b.className='rbtn'+(selectedRegions.has(r.id)?' sel':'');b.textContent=(selectedRegions.has(r.id)?'✓ ':'')+r.label;b.onclick=()=>toggleRegion(r.id,true);ri.appendChild(b);});
+  const info=document.getElementById('rsel-info');
+  const labels=[...selectedRegions].map(r=>{const intl=REGIONS_INTL.find(x=>x.id===r);return intl?intl.label:r;});
+  info.textContent=labels.length?'Sélectionné : '+labels.join(', '):'Aucune destination sélectionnée';
+  const dg=document.getElementById('dg');dg.innerHTML='';
+  DUREE.forEach(o=>{const b=document.createElement('button');b.className='opt'+(duree===o.id?' sel':'');b.innerHTML=`<span class="oi">${o.icon}</span><span class="ol">${o.label}</span><span class="od">${o.desc}</span><span class="ck">✓</span>`;b.onclick=()=>{duree=o.id;renderReg();};dg.appendChild(b);});
+  document.getElementById('bgen').disabled=!duree||selectedRegions.size===0;
+}
+
+// ═══════════════════════════════════════
+// MOTEUR DE SCORE
+// ═══════════════════════════════════════
+function getDests(){
+  const d=[];
+  if([...selectedRegions].some(r=>REGIONS_FR.includes(r)))d.push('france');
+  if(selectedRegions.has('canada'))d.push('canada');
+  if(selectedRegions.has('usa'))d.push('usa');
+  if(selectedRegions.has('europe'))d.push('europe');
+  return d;
+}
+
+function scoreItem(f){
+  const domaines=answers.domaine||[];
+  const sel=answers.selectivite?.[0]||'assez_bon';
+  const spe=answers.specialisation?.[0]||'progressif';
+  const fin=answers.finances?.[0]||'moderee';
+  const dur=duree||'indifferent';
+  const dests=getDests();
+  let s=0;
+  if(!f.destinations.some(d=>dests.includes(d)))return -1;
+  const matchDom=domaines.filter(d=>f.domaines.includes(d)).length;
+  if(matchDom===0)return -1;
+  s+=matchDom*30;
+  if(f.selectivite.includes(sel))s+=25;
+  else if(sel==='tres_bon')s+=8;
+  else if(sel==='mauvais'&&!f.selectivite.includes('mauvais'))s-=25;
+  if(f.specialisation.includes(spe))s+=15;
+  if(f.finances.includes(fin))s+=15;
+  else if(fin==='public'&&!f.finances.includes('public'))s-=35;
+  else if(fin==='moderee'&&!f.finances.includes('moderee')&&!f.finances.includes('public'))s-=10;
+  if(f.duree.includes(dur)||dur==='indifferent')s+=10; else s-=5;
+  if(f.rare)s+=5;
+  return s;
+}
+
+function showResults(){
+  const domaines=answers.domaine||[];
+  const sel=answers.selectivite?.[0]||'assez_bon';
+  const fin=answers.finances?.[0]||'moderee';
+  const dur=duree||'indifferent';
+  const dests=getDests();
+  const wantsFrance=dests.includes('france');
+
+  // 1. Groupes de licences correspondants
+  const matchedGroups=LICENCES_GROUPS.filter(g=>{
+    if(!wantsFrance)return false;
+    if(!g.domaines.some(d=>domaines.includes(d)))return false;
+    if(!g.selectivite.includes(sel)&&sel==='mauvais')return false;
+    if(fin==='public'&&!g.finances.includes('public'))return false;
+    if((dur==='courte'))return false; // licences = 3 ans, pas courtes
+    return true;
+  });
+
+  // 2. Formations spécialisées scorées
+  const scoredSpecial=DB_SPECIAL
+    .map(f=>({...f,_score:scoreItem(f)}))
+    .filter(f=>f._score>0)
+    .sort((a,b)=>b._score-a._score);
+
+  // Séparer concours/écoles des autres
+  const concoursIngenieur=scoredSpecial.filter(f=>f.type==='concours_ingenieur').slice(0,3);
+  const concoursCommerce=scoredSpecial.filter(f=>f.type==='concours_commerce').slice(0,2);
+  const autresSpecial=scoredSpecial.filter(f=>f.type==='special').slice(0,5);
+
+  // Profil chips
+  const profil=[
+    {l:"Domaines",vs:domaines.map(d=>LABELS.domaine[d])},
+    {l:"Dossier",vs:[LABELS.selectivite[sel]]},
+    {l:"Approche",vs:[LABELS.specialisation[answers.specialisation?.[0]]]},
+    {l:"Budget",vs:[LABELS.finances[fin]]},
+    {l:"Durée",vs:[LABELS.duree[dur]]},
+    {l:"Destinations",vs:[[...selectedRegions].map(r=>{const intl=REGIONS_INTL.find(x=>x.id===r);return intl?intl.label:r;}).join(', ')]},
+  ];
+  const pc=document.getElementById('pchips');pc.innerHTML='';
+  profil.forEach(p=>p.vs.filter(Boolean).forEach(v=>{
+    const s=document.createElement('span');s.className='pchip';s.innerHTML=`<b>${p.l} </b>${v}`;pc.appendChild(s);
+  }));
+
+  const fl=document.getElementById('flist');fl.innerHTML='';
+  let delay=0;
+
+  // ── GROUPES LICENCES ──
+  matchedGroups.forEach(g=>{
+    const card=document.createElement('div');
+    card.className='fcard-group';
+    card.style.animationDelay=(delay*0.06)+'s';
+    delay++;
+    const stH=[...Array(g.sel)].map(()=>`<span style="color:#e74c3c;font-size:13px">★</span>`).join('')+[...Array(5-g.sel)].map(()=>`<span style="color:var(--mu2);font-size:13px">★</span>`).join('');
+    card.innerHTML=`
+      <div class="fcard-group-header">
+        <span style="font-size:24px">${g.emoji}</span>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span class="group-title">${g.titre}</span>
+            <span class="group-badge">Licence 3 ans</span>
+          </div>
+          <div class="group-sub">Disponibles dans <strong style="color:var(--tx)">toutes les universités publiques</strong> de France • Frais : ${g.cout}</div>
+        </div>
+      </div>
+      <div class="group-info">
+        📚 <strong>Exemples de sujets d'études :</strong> ${g.sujets.join(' • ')}
+        <br><br>La licence te permet de construire ta spécialisation progressivement. Après la 3ème année, tu peux poursuivre en <strong>master</strong> (bac+5), préparer les <strong>concours de l'enseignement</strong> ou intégrer une <strong>école spécialisée</strong>.
+      </div>
+      <div class="fmeta">
+        <div><span class="fml">Sélectivité</span><div>${stH}</div></div>
+        <div><span class="fml">Coût/an</span><span class="fmv">${g.cout}</span></div>
+        <div><span class="fml">Accès</span><span class="fmv" style="color:var(--green)">✓ Parcoursup</span></div>
+      </div>
+      <div class="debs">${g.debouches.map(d=>`<span class="deb">${d}</span>`).join('')}</div>
+      <div class="fplus"><span>💡</span><span class="fpluxt">${g.plus}</span></div>
+      <div class="flinks">
+        <a href="https://www.onisep.fr/recherche?motsCles=${encodeURIComponent(g.onisep)}" target="_blank" class="lnk">📘 Onisep</a>
+        <a href="https://www.parcoursup.gouv.fr" target="_blank" class="lnk g">🎓 Parcoursup</a>
+      </div>`;
+    fl.appendChild(card);
+  });
+
+  // ── CONCOURS INGÉNIEUR ──
+  concoursIngenieur.forEach(f=>{
+    const card=document.createElement('div');
+    card.className='fcard-concours';
+    card.style.animationDelay=(delay*0.06)+'s';
+    delay++;
+    const stH=[...Array(f.sel)].map(()=>`<span style="color:#e74c3c;font-size:13px">★</span>`).join('')+[...Array(5-f.sel)].map(()=>`<span style="color:var(--mu2);font-size:13px">★</span>`).join('');
+    card.innerHTML=`
+      ${f.rare?'<div class="rare-b">💎 Option méconnue</div>':''}
+      <div class="ftop">
+        <span style="font-size:22px;flex-shrink:0">${f.emoji}</span>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span class="fnom">${f.nom}</span>
+          <span class="ftype">${f.type}</span>
+        </div>
+        <span class="fduree">${f.duree}</span>
+      </div>
+      <div class="concours-header">
+        <span class="concours-badge">🏆 ${f.concours_label}</span>
+      </div>
+      <div class="concours-ecoles">${f.ecoles.map(e=>`<span class="ecole-tag">${e}</span>`).join('')}</div>
+      <div class="fmeta">
+        <div><span class="fml">Sélectivité</span><div>${stH}</div></div>
+        <div><span class="fml">Coût/an</span><span class="fmv">${f.cout}</span></div>
+        ${f.parcoursup?'<div><span class="fml">Accès</span><span class="fmv" style="color:var(--green)">✓ Parcoursup</span></div>':''}
+      </div>
+      <div class="debs">${f.debouches.map(d=>`<span class="deb">${d}</span>`).join('')}</div>
+      <div class="fplus"><span>💡</span><span class="fpluxt">${f.plus}</span></div>
+      <div class="flinks">
+        <a href="https://www.onisep.fr/recherche?motsCles=${encodeURIComponent(f.onisep)}" target="_blank" class="lnk">📘 Onisep</a>
+        ${f.parcoursup?'<a href="https://www.parcoursup.gouv.fr" target="_blank" class="lnk g">🎓 Parcoursup</a>':''}
+      </div>`;
+    fl.appendChild(card);
+  });
+
+  // ── CONCOURS COMMERCE ──
+  concoursCommerce.forEach(f=>{
+    const card=document.createElement('div');
+    card.className='fcard-concours';
+    card.style.animationDelay=(delay*0.06)+'s';
+    delay++;
+    const stH=[...Array(f.sel)].map(()=>`<span style="color:#e74c3c;font-size:13px">★</span>`).join('')+[...Array(5-f.sel)].map(()=>`<span style="color:var(--mu2);font-size:13px">★</span>`).join('');
+    card.innerHTML=`
+      <div class="ftop">
+        <span style="font-size:22px;flex-shrink:0">${f.emoji}</span>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span class="fnom">${f.nom}</span>
+          <span class="ftype">${f.type}</span>
+        </div>
+        <span class="fduree">${f.duree}</span>
+      </div>
+      <div class="concours-header">
+        <span class="concours-badge">🏆 ${f.concours_label}</span>
+      </div>
+      <div class="concours-ecoles">${f.ecoles.map(e=>`<span class="ecole-tag">${e}</span>`).join('')}</div>
+      <div class="fmeta">
+        <div><span class="fml">Sélectivité</span><div>${stH}</div></div>
+        <div><span class="fml">Coût/an</span><span class="fmv">${f.cout}</span></div>
+        ${f.parcoursup?'<div><span class="fml">Accès</span><span class="fmv" style="color:var(--green)">✓ Parcoursup</span></div>':''}
+      </div>
+      <div class="debs">${f.debouches.map(d=>`<span class="deb">${d}</span>`).join('')}</div>
+      <div class="fplus"><span>💡</span><span class="fpluxt">${f.plus}</span></div>
+      <div class="flinks">
+        <a href="https://www.onisep.fr/recherche?motsCles=${encodeURIComponent(f.onisep)}" target="_blank" class="lnk">📘 Onisep</a>
+        ${f.parcoursup?'<a href="https://www.parcoursup.gouv.fr" target="_blank" class="lnk g">🎓 Parcoursup</a>':''}
+      </div>`;
+    fl.appendChild(card);
+  });
+
+  // ── AUTRES FORMATIONS SPÉCIALISÉES ──
+  autresSpecial.forEach(f=>{
+    const isIntl=f.pays!=='France';
+    const card=document.createElement('div');
+    card.className='fcard';
+    card.style.animationDelay=(delay*0.06)+'s';
+    delay++;
+    const stH=[...Array(f.sel)].map(()=>`<span style="color:#e74c3c;font-size:13px">★</span>`).join('')+[...Array(5-f.sel)].map(()=>`<span style="color:var(--mu2);font-size:13px">★</span>`).join('');
+    card.innerHTML=`
+      ${isIntl?`<div class="intl-b">🌍 International — ${f.pays}</div>`:''}
+      ${f.rare?'<div class="rare-b">💎 Formation méconnue — à explorer !</div>':''}
+      <div class="ftop">
+        <span style="font-size:22px;flex-shrink:0">${f.emoji}</span>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+          <span class="fnom">${f.nom}</span>
+          <span class="ftype">${f.type}</span>
+        </div>
+        <span class="fduree">${f.duree}</span>
+      </div>
+      <div class="fmeta">
+        <div><span class="fml">Sélectivité</span><div>${stH}</div></div>
+        <div><span class="fml">Coût/an</span><span class="fmv">${f.cout}</span></div>
+        ${!isIntl&&f.parcoursup?'<div><span class="fml">Accès</span><span class="fmv" style="color:var(--green)">✓ Parcoursup</span></div>':''}
+      </div>
+      <div class="debs">${f.debouches.map(d=>`<span class="deb">${d}</span>`).join('')}</div>
+      <div class="fplus"><span>💡</span><span class="fpluxt">${f.plus}</span></div>
+      <div class="flinks">
+        ${isIntl&&f.url?`<a href="${f.url}" target="_blank" class="lnk b">🌐 Site officiel</a>`:''}
+        ${!isIntl?`<a href="https://www.onisep.fr/recherche?motsCles=${encodeURIComponent(f.onisep)}" target="_blank" class="lnk">📘 Onisep</a>`:''}
+        ${!isIntl&&f.parcoursup?'<a href="https://www.parcoursup.gouv.fr" target="_blank" class="lnk g">🎓 Parcoursup</a>':''}
+      </div>`;
+    fl.appendChild(card);
+  });
+
+  if(fl.children.length===0){
+    fl.innerHTML=`<div class="no-res">Aucune formation trouvée pour ce profil.<br>Essaie de modifier tes critères ou d'élargir les destinations.</div>`;
+  }
+
+  show('p-res');
+}
+
+// ═══════════════════════════════════════
+// IMPRESSION
+// ═══════════════════════════════════════
+function doPrint(){
+  const profil=[
+    {l:"Domaines",vs:(answers.domaine||[]).map(d=>LABELS.domaine[d])},
+    {l:"Dossier",vs:[LABELS.selectivite[answers.selectivite?.[0]]]},
+    {l:"Approche",vs:[LABELS.specialisation[answers.specialisation?.[0]]]},
+    {l:"Budget",vs:[LABELS.finances[answers.finances?.[0]]]},
+    {l:"Durée",vs:[LABELS.duree[duree]]},
+    {l:"Destinations",vs:[[...selectedRegions].join(', ')]},
+  ];
+  let chips='';profil.forEach(p=>p.vs.filter(Boolean).forEach(v=>{chips+=`<span class="chip"><b>${p.l}</b> : ${v}</span>`;}));
+  // Extraire le contenu des cartes
+  const allCards=document.querySelectorAll('.fcard,.fcard-group,.fcard-concours');
+  let cardsHtml='';
+  allCards.forEach(card=>{
+    const nom=card.querySelector('.fnom,.group-title,.concours-title')?.textContent||'Formation';
+    const type=card.querySelector('.ftype')?.textContent||'';
+    const dur=card.querySelector('.fduree')?.textContent||'';
+    const plus=card.querySelector('.fpluxt')?.textContent||'';
+    const debs=[...card.querySelectorAll('.deb')].map(d=>d.textContent);
+    const intlB=card.querySelector('.intl-b');
+    const rareB=card.querySelector('.rare-b');
+    const concBadge=card.querySelector('.concours-badge');
+    const ecoles=[...card.querySelectorAll('.ecole-tag')].map(e=>e.textContent);
+    const subjInfo=card.querySelector('.group-info');
+    const stars=card.querySelectorAll('span[style*="#e74c3c"]').length;
+    const stStr='★'.repeat(stars)+'☆'.repeat(5-stars);
+    const lnk=card.querySelector('.lnk');
+    cardsHtml+=`<div class="card">
+      ${intlB?`<span class="intl-badge">${intlB.textContent}</span>`:''}
+      ${rareB?`<span class="rare-badge">${rareB.textContent}</span>`:''}
+      <div class="top"><div style="flex:1"><div class="nom">${nom}</div><div class="type">${type}</div></div><span class="badge">${dur}</span></div>
+      ${concBadge?`<div class="concours-info">${concBadge.textContent}</div>`:''}
+      ${ecoles.length?`<div class="ecoles">${ecoles.map(e=>`<span class="ecole">${e}</span>`).join('')}</div>`:''}
+      ${subjInfo?`<div class="subjinfo">${subjInfo.textContent.substring(0,200)}…</div>`:''}
+      <div class="meta"><div><div class="ml">Sélectivité</div><div class="stars">${stStr}</div></div></div>
+      <div class="debs">${debs.map(d=>`<span class="deb">${d}</span>`).join('')}</div>
+      <div class="plus">💡 ${plus}</div>
+      ${lnk?`<div class="links">🔗 ${lnk.href}</div>`:''}
+    </div>`;
+  });
+  const w=window.open('','_blank');
+  const date=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>INFOSES CAP Orientation</title><style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',sans-serif;background:#fff;color:#1e293b;padding:28px;max-width:680px;margin:0 auto}
+h1{font-size:22px;font-weight:800;margin-bottom:2px;color:#8b0000}.sub{font-size:11px;color:#94a3b8;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #c0392b}
+.stitle{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin:16px 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}.chip{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:14px;padding:2px 9px;font-size:11px;color:#334155}
+.card{border:1px solid #e2e8f0;border-radius:9px;padding:11px 13px;margin-bottom:9px;break-inside:avoid}
+.intl-badge{background:#dbeafe;border:1px solid #bfdbfe;border-radius:4px;padding:2px 7px;font-size:10px;color:#1d4ed8;font-weight:700;display:inline-block;margin-bottom:5px}
+.rare-badge{background:#fef9c3;border:1px solid #fde047;border-radius:4px;padding:2px 7px;font-size:10px;color:#854d0e;font-weight:700;display:inline-block;margin-bottom:5px}
+.concours-info{background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:3px 8px;font-size:10px;color:#991b1b;font-weight:700;display:inline-block;margin-bottom:5px}
+.ecoles{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px}.ecole{background:#fff7ed;border:1px solid #fed7aa;border-radius:4px;padding:1px 6px;font-size:9px;color:#9a3412}
+.subjinfo{font-size:10px;color:#64748b;background:#f8fafc;border-radius:4px;padding:5px 7px;margin-bottom:5px;line-height:1.4}
+.top{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.nom{font-size:13px;font-weight:700;color:#0f172a}.type{font-size:10px;color:#64748b}
+.badge{font-size:10px;background:#fef2f2;color:#991b1b;border-radius:4px;padding:2px 6px;font-weight:600;margin-left:auto}
+.meta{display:flex;gap:14px;margin-bottom:6px}.ml{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:#94a3b8}
+.stars{color:#c0392b;font-size:12px}.debs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.deb{background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:2px 7px;font-size:10px;color:#991b1b}
+.plus{background:#fffbeb;border-radius:5px;padding:6px 8px;font-size:11px;color:#92400e;line-height:1.4;margin-bottom:5px}
+.links{font-size:10px;color:#c0392b}.footer{margin-top:24px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:12px}
+@media print{body{padding:10px}}
+</style></head><body>`);
+  w.document.write(`<h1>📚 INFOSES : CAP Orientation</h1><p class="sub">Généré le ${date} • outil indicatif non contractuel</p>`);
+  w.document.write(`<div class="stitle">Mon profil</div><div class="chips">${chips}</div>`);
+  w.document.write(`<div class="stitle">Formations recommandées</div>${cardsHtml}`);
+  w.document.write(`<div class="footer">INFOSES : CAP Orientation • Outil indicatif • Non contractuel • Onisep • Parcoursup</div></body></html>`);
+  w.document.close();w.focus();setTimeout(()=>w.print(),400);
+}
+
+gotoStep(-1);
+</script>
+</body>
+</html>
